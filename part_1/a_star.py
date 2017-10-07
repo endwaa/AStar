@@ -6,7 +6,7 @@ import collections
 Result = collections.namedtuple('Result', ['path', 'frontier', 'closed'])
 
 
-# Heuristics cost methods (Estimated cost to goal)
+# Heuristic cost methods (Estimated cost to goal)
 ############
 
 def manhattan_distance(node, goal):
