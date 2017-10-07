@@ -5,7 +5,7 @@ from a_star import a_star
 
 # Filename for reading board config
 file_dir = os.path.dirname(os.path.realpath('__file__'))
-filename = os.path.join(file_dir, '../boards/board-1-4.txt')
+filename = os.path.join(file_dir, '../boards/board-2-4.txt')
 
 # Create list with nodes
 node_graph = read_from_txt(filename)

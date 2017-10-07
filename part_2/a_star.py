@@ -58,7 +58,7 @@ def a_star(start, goal):
                 continue
 
             neighbor.parent = current
-            neighbor.cost = current.cost + 1
+            neighbor.cost = current.cost + neighbor.cell_cost
             neighbor.estimated_cost = total_cost(neighbor, goal)
 
             if neighbor not in frontier:

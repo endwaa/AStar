@@ -14,6 +14,7 @@ class Node:
         self.x = x
         self.y = y
         self.content = content
+        self.cell_cost = cell_costs(content)
         self.cost = 0
         self.estimated_cost = 0
         self.neighbors = []
@@ -69,6 +70,62 @@ def create_neighbors(node, node_graph):
             node.add_neighbor(neighbor[0])
 
 
+# Get cell cost based on content
+def cell_costs(content):
+    # Water
+    if content is 'w':
+        return 100
+
+    # Mountains
+    if content is 'm':
+        return 50
+
+    # Forests
+    if content is 'f':
+        return 10
+
+    # Grassland
+    if content is 'g':
+        return 5
+
+    # Roads
+    if content is 'r':
+        return 1
+
+    return 0
+
+
+# Get board color based on content
+def get_color(content):
+    # Water
+    if content is 'w':
+        return '#0000ff' # Blue
+
+    # Mountains 
+    if content is 'm':
+        return '#808080' # Gray
+
+    # Forests
+    if content is 'f':
+        return '#004d00' # Dark green
+
+    # Grassland
+    if content is 'g':
+        return '#00e600' # Light green
+
+    # Roads
+    if content is 'r':
+        return '#c68c53' # Light brown
+
+    # Start
+    if content is 'A':
+        return '#000000' # Black
+
+    # Goal
+    if content is 'B':
+        return '#ffff00' # Yellow
+
+
 # Draw board with path, frontier and closed nodes.
 def draw_board(path, frontier, closed, node_graph):
     im = Image.new('RGB', (BOARD_WIDTH*100,BOARD_HEIGHT*100), (255,255,255))
@@ -76,24 +133,14 @@ def draw_board(path, frontier, closed, node_graph):
     for i in range(BOARD_HEIGHT):
         for j in range(BOARD_WIDTH):
             node = list(filter(lambda n: n.x == i and n.y == j, node_graph))[0]
-            if node.content == '#':
-                dr.rectangle([(0+j*100,0+i*100),(100+j*100,100+i*100)], fill="gray", outline = "black")
-            else: 
-                dr.rectangle([(0+j*100,0+i*100),(100+j*100,100+i*100)], fill="white", outline = "black")
+            dr.rectangle([(0+j*100,0+i*100),(100+j*100,100+i*100)], fill=get_color(node.content), outline = "black")
 
-                # Start node
-                if node.content == 'A':
-                    dr.rectangle([(0+j*100+30,0+i*100+30),(100+j*100-30,100+i*100-30)], fill='black')
-
-                # Goal node
-                elif node.content == 'B':
-                    dr.rectangle([(0+j*100+30,0+i*100+30),(100+j*100-30,100+i*100-30)], fill='yellow')
-                elif node in path:
-                    dr.rectangle([(0+j*100+30,0+i*100+30),(100+j*100-30,100+i*100-30)], fill='green')
-                elif node in frontier:
-                    dr.rectangle([(0+j*100+30,0+i*100+30),(100+j*100-30,100+i*100-30)], fill='blue')
-                elif node in closed:
-                    dr.rectangle([(0+j*100+30,0+i*100+30),(100+j*100-30,100+i*100-30)], fill='red')
+            if node in path:
+                dr.ellipse((0+j*100+30,0+i*100+30,100+j*100-30,100+i*100-30), fill='black')
+            elif node in frontier:
+                dr.ellipse((0+j*100+30,0+i*100+30,100+j*100-30,100+i*100-30), fill='white')
+            elif node in closed:
+                dr.ellipse((0+j*100+30,0+i*100+30,100+j*100-30,100+i*100-30), fill='red')
     
     # Display image        
     im.show()       
