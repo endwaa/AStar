@@ -54,7 +54,7 @@ def a_star(start, goal):
                 closed.append(neighbor)
                 continue
             
-            if neighbor in closed:
+            if neighbor in closed or neighbor in frontier:
                 continue
 
             neighbor.parent = current
