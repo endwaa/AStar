@@ -28,7 +28,7 @@ class Node:
 
     def __eq__(self, other):
         return (self.x == other.x and self.y == other.y)
-
+    
 
 # Read board config from txt file and returns a list with all nodes
 def read_from_txt(filename):
@@ -135,13 +135,18 @@ def draw_board(path, frontier, closed, node_graph):
             node = list(filter(lambda n: n.x == i and n.y == j, node_graph))[0]
             dr.rectangle([(0+j*100,0+i*100),(100+j*100,100+i*100)], fill=get_color(node.content), outline = "black")
 
+            # Black circle indicates shortest path
             if node in path:
                 dr.ellipse((0+j*100+30,0+i*100+30,100+j*100-30,100+i*100-30), fill='black')
+            
+            # White circle indicates that this node was in frontier list
             elif node in frontier:
                 dr.ellipse((0+j*100+30,0+i*100+30,100+j*100-30,100+i*100-30), fill='white')
+
+            # Red circle indicates that this node was in closed list
             elif node in closed:
                 dr.ellipse((0+j*100+30,0+i*100+30,100+j*100-30,100+i*100-30), fill='red')
     
     # Display image        
-    im.show()       
+    im.show()     
     
