@@ -28,8 +28,8 @@ def reconstruct_path(node, start):
     path = []
     path.append(node)
     while node != start:
-        path.append(node)
         node = node.parent
+        path.append(node)
     return path
 
 
