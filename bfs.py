@@ -22,7 +22,7 @@ def bfs(start, goal):
     closed = []
 
     while frontier:
-        current = frontier[0] # Get node with least cost
+        current = frontier[0]
 
         if current == goal:
             path = reconstruct_path(current, start)
