@@ -92,7 +92,8 @@ def cell_costs(content):
     if content is 'r':
         return 1
 
-    return 0
+    # Default
+    return 1
 
 
 # Get board color based on content
@@ -119,34 +120,49 @@ def get_color(content):
 
     # Start
     if content is 'A':
-        return '#000000' # Black
+        return '#ffffff' # Black
 
     # Goal
     if content is 'B':
         return '#ffff00' # Yellow
 
+    # BLocked node
+    if content is '#':
+        return 'gray'
+
+    # Default
+    return 'white'
 
 # Draw board with path, frontier and closed nodes.
-def draw_board(path, frontier, closed, node_graph):
+def draw_board(path, frontier, closed, node_graph, filename):
     im = Image.new('RGB', (BOARD_WIDTH*100,BOARD_HEIGHT*100), (255,255,255))
     dr = ImageDraw.Draw(im)
+    font = ImageFont.truetype("Arial.ttf", 25)
     for i in range(BOARD_HEIGHT):
         for j in range(BOARD_WIDTH):
             node = list(filter(lambda n: n.x == i and n.y == j, node_graph))[0]
             dr.rectangle([(0+j*100,0+i*100),(100+j*100,100+i*100)], fill=get_color(node.content), outline = "black")
 
-            # Black circle indicates shortest path
-            if node in path:
-                dr.ellipse((0+j*100+30,0+i*100+30,100+j*100-30,100+i*100-30), fill='black')
-            
             # White circle indicates that this node was in frontier list
-            elif node in frontier:
-                dr.ellipse((0+j*100+30,0+i*100+30,100+j*100-30,100+i*100-30), fill='white')
+            if node in frontier and node not in path:
+                dr.ellipse((0+j*100+30,0+i*100+30,100+j*100-30,100+i*100-30), fill='black')
 
             # Red circle indicates that this node was in closed list
-            elif node in closed:
+            elif node in closed and node not in path:
                 dr.ellipse((0+j*100+30,0+i*100+30,100+j*100-30,100+i*100-30), fill='red')
+
+            # Draw text for start node
+            if node.content is 'A':
+                dr.text((0+j*100+10,0+i*100+10), "START", (0,0,0), font=font)
+
+            # Draw text for goal node
+            if node.content is 'B':
+                dr.text((0+j*100+10,0+i*100+10), "GOAL", (0,0,0), font=font)
     
-    # Display image        
-    im.show()     
+
+    # Line from start to goal
+    dr.line([(n.y*100 + 50, n.x*100 + 50) for n in path], fill="pink", width=15)
+
+    # Save image
+    im.save("img/{0}.png".format(filename), "PNG")   
     

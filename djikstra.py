@@ -6,23 +6,6 @@ import collections
 Result = collections.namedtuple('Result', ['path', 'frontier', 'closed'])
 
 
-# Heuristic cost methods (Estimated cost to goal)
-############
-
-def manhattan_distance(node, goal):
-    return abs(node.x - goal.x) + abs(node.y - goal.y)
-
-
-def euclidean_distance(node, goal):
-    return math.sqrt((node.x - goal.x)**2 + (node.y - goal.y)**2)
-
-############
-
-# Cost so far and heuristic cost
-def total_cost(node, goal):
-    return node.cost + manhattan_distance(node, goal)
-
-
 # Reconstruct shortest path from start to goal node
 def reconstruct_path(node, start):
     path = []
@@ -34,7 +17,7 @@ def reconstruct_path(node, start):
 
 
 # Calculate shortest path form start to goal
-def a_star(start, goal):
+def djikstra(start, goal):
     frontier = [start]
     closed = []
 
@@ -58,8 +41,8 @@ def a_star(start, goal):
                 continue
 
             neighbor.parent = current
-            neighbor.cost = current.cost + 1
-            neighbor.estimated_cost = total_cost(neighbor, goal)
+            neighbor.cost = current.cost + neighbor.cell_cost
+            neighbor.estimated_cost = neighbor.cost
 
             if neighbor not in frontier:
                 bisect.insort(frontier, neighbor) # Adds node in frontier list (Ascending order)
